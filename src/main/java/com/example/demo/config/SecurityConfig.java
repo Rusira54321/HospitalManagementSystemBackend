@@ -36,7 +36,7 @@ public class SecurityConfig
         http.cors(cors->cors.configurationSource(corsConfigurationSource()))  //Enable cors for react
                 .csrf(csrf->csrf.ignoringRequestMatchers("/api/**"))
                 .authorizeHttpRequests(authz->authz
-                        .requestMatchers("/api/auth/login","api/auth/register").permitAll()
+                        .requestMatchers("/api/auth/login","api/auth/register/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/doctor/**").hasRole("DOCTOR")
                         .requestMatchers("/api/patient/**").hasRole("PATIENT")

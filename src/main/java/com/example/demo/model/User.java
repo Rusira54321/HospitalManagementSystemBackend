@@ -25,7 +25,20 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany(fetch=FetchType.EAGER)
+    @Column(nullable = false,unique = true)
+    private String email;
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Doctor doctor;
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Patient patient;
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    private HospitalStaff hospitalStaff;
+
+    @ManyToMany(
+            fetch=FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -38,13 +51,48 @@ public class User implements UserDetails {
 
     }
 
-    public User(String username,String password,Set<Role> roles)
+    public User(String username,String password,Set<Role> roles,String email)
     {
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.email = email;
     }
 
+    public void setDoctor(Doctor doctor)
+    {
+        this.doctor = doctor;
+    }
+
+    public void setPatient(Patient patient)
+    {
+        this.patient = patient;
+    }
+
+    public void setHospitalStaff(HospitalStaff hospitalStaff)
+    {
+        this.hospitalStaff = hospitalStaff;
+    }
+    public Doctor getDoctor()
+    {
+        return doctor;
+    }
+    public Patient getPatient()
+    {
+        return patient;
+    }
+    public HospitalStaff getHospitalStaff()
+    {
+        return hospitalStaff;
+    }
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+    public String getEmail()
+    {
+        return  email;
+    }
     public void setId(Long id) {
         this.id = id;
     }
