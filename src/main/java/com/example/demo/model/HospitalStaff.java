@@ -2,12 +2,12 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "hospitalStaff")
-public class HospitalStaff {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long employeeID;
+public class HospitalStaff extends  User{
+
 
     @Column(nullable = false)
     private String firstName;
@@ -15,9 +15,6 @@ public class HospitalStaff {
     @Column(nullable = false)
     private String lastName;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id",nullable = false)
-    private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hospital_id",nullable = false)
@@ -26,8 +23,9 @@ public class HospitalStaff {
     public HospitalStaff()
     {}
 
-    public HospitalStaff(String firstName,String lastName)
+    public HospitalStaff(String firstName, String lastName, String username, String password,Set<Role> roles,String email)
     {
+        super(username,password,email);
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -50,15 +48,7 @@ public class HospitalStaff {
         this.lastName = lastName;
     }
 
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
 
-    public Long getEmployeeID()
-    {
-        return employeeID;
-    }
 
     public String getFirstName()
     {
@@ -70,8 +60,5 @@ public class HospitalStaff {
         return lastName;
     }
 
-    public User getUser()
-    {
-        return  user;
-    }
+
 }

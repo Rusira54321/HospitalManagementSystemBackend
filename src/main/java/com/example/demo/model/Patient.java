@@ -1,55 +1,52 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "patients")
-public class Patient {
+public class Patient extends User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @JsonProperty("FirstName")
     @Column(nullable = false)
     private String FirstName;
 
+    @JsonProperty("LastName")
     @Column(nullable = false)
     private String LastName;
 
+    @JsonProperty("dateOfBirth")
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
+    @JsonProperty("gender")
     @Column(nullable = false)
     private String gender;
 
+    @JsonProperty("PhoneNumber")
     @Column
     private String PhoneNumber;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id",nullable = false)
-    private User user;
-
-    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "medicalrecords_id")
     private MedicalRecords medicalRecords;
-
 
     public Patient()
     {
 
     }
 
-    public Patient(String FirstName,String LastName,LocalDate dateOfBirth,String gender,User user,String PhoneNumber,MedicalRecords medicalRecords)
+    public Patient(String FirstName, String LastName,LocalDate dateOfBirth,String gender, String PhoneNumber, String username, String password, String email)
     {
+        super(username,password,email);
         this.FirstName = FirstName;
         this.LastName = LastName;
-        this.dateOfBirth = dateOfBirth;
         this.gender = gender;
-        this.user = user;
         this.PhoneNumber = PhoneNumber;
-        this.medicalRecords = medicalRecords;
+        this.dateOfBirth = dateOfBirth;
     }
 
     public void setMedicalRecords(MedicalRecords medicalRecords)
@@ -84,17 +81,6 @@ public class Patient {
     {
         this.gender = gender;
     }
-
-
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
-
-    public Long getId()
-    {
-        return id;
-    }
     public String getFirstName()
     {
         return FirstName;
@@ -111,12 +97,6 @@ public class Patient {
     {
         return gender;
     }
-
-    public User getUser()
-    {
-        return  user;
-    }
-
     public String getPhoneNumber()
     {
         return PhoneNumber;

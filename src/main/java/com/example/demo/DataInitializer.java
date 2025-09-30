@@ -52,7 +52,8 @@ public class DataInitializer {
             Set<Role> roles = new HashSet<Role>();
             roles.add(existRole);
             String encodePassword = passwordEncoder.encode("Admin12345");
-            User newuser = new User("Admin",encodePassword,roles,"rusira42103@gmail.com");
+            User newuser = new User("Admin",encodePassword,"rusira42103@gmail.com");
+            newuser.setRoles(roles);
             userRepository.save(newuser);
         }
     }

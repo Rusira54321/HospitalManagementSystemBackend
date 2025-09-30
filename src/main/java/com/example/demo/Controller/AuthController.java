@@ -1,16 +1,16 @@
 package com.example.demo.Controller;
 
 
-import com.example.demo.model.HospitalStaff;
-import com.example.demo.model.Role;
-import com.example.demo.model.User;
-import com.example.demo.repository.RoleRepository;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.model.*;
+import com.example.demo.repository.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -20,43 +20,118 @@ public class AuthController
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    public AuthController(RoleRepository roleRepository,PasswordEncoder passwordEncoder,UserRepository userRepository)
+    private final HospitalRepository hospitalRepository;
+    private final HospitalStaffRepository hospitalStaffRepository;
+    private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
+    public AuthController(RoleRepository roleRepository, PasswordEncoder passwordEncoder, UserRepository userRepository, HospitalRepository hospitalRepository, HospitalStaffRepository hospitalStaffRepository,DoctorRepository doctorRepository,PatientRepository patientRepository)
     {
+        this.hospitalStaffRepository = hospitalStaffRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.hospitalRepository = hospitalRepository;
+        this.doctorRepository = doctorRepository;
+        this.patientRepository = patientRepository;
     }
 
     @PostMapping("/register/hospitalStaff")
-    public ResponseEntity<?> register(@RequestBody HospitalStaff hospitalStaff,@RequestParam String username,@RequestParam String password,@RequestParam String email
-     , @RequestParam String role,@RequestParam String hospitalID)
+    public ResponseEntity<?> register(@RequestBody HospitalStaff hospitalStaff,@RequestParam String hospitalID,@RequestParam String role)
     {
-        Role existRole = roleRepository.findByName(role);
-        if(existRole==null)
+        try {
+            Optional<User> existingUser = userRepository.findByUsername(hospitalStaff.getUsername());
+            if(existingUser.isPresent())
+            {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("User is already registered");
+            }
+            Role existRole = roleRepository.findByName("ROLE_"+role.toUpperCase());
+            if (existRole == null) {
+                Role newrole = new Role("ROLE_"+role.toUpperCase());
+                existRole = roleRepository.save(newrole);
+            }
+            Set<Role> roles = new HashSet<Role>();
+            roles.add(existRole);
+            String encodePassword = passwordEncoder.encode(hospitalStaff.getPassword());
+            hospitalStaff.setPassword(encodePassword);
+            hospitalStaff.setRoles(roles);
+            Long id = Long.parseLong(hospitalID);
+            Hospital existHospital = hospitalRepository.findByHospitalId(id);
+            if (existHospital == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("The hospital is not found");
+            }
+            hospitalStaff.setHospital(existHospital);
+            HospitalStaff hospitalStaff1 = hospitalStaffRepository.save(hospitalStaff);
+            if (hospitalStaff1 == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("User could not be created");
+            }
+            return ResponseEntity.status(HttpStatus.CREATED).body("User registration successfully");
+        }catch (Exception e)
         {
-            Role newrole = new Role(role);
-            existRole = roleRepository.save(newrole);
-        }
-        Set<Role> roles = new HashSet<Role>();
-        roles.add(existRole);
-        String encodePassword = passwordEncoder.encode(password);
-        User newuser = new User(username,encodePassword,roles,email);
-        User createdUser = userRepository.save(newuser);
-        if(createdUser==null)
-        {
-
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
 
     @PostMapping("/register/doctor")
-    public ResponseEntity<?> register()
+    public ResponseEntity<?> register(@RequestBody Doctor doctor, @RequestParam String hospitalId)
     {
-
+        try {
+            Optional<User> existingUser = userRepository.findByUsername(doctor.getUsername());
+            if(existingUser.isPresent())
+            {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("User is already registered");
+            }
+            Role existRole = roleRepository.findByName("ROLE_DOCTOR");
+            if (existRole == null) {
+                Role newrole = new Role("ROLE_DOCTOR");
+                existRole = roleRepository.save(newrole);
+            }
+            Set<Role> roles = new HashSet<Role>();
+            roles.add(existRole);
+            String encodedPassword = passwordEncoder.encode(doctor.getPassword());
+            doctor.setPassword(encodedPassword);
+            doctor.setRoles(roles);
+            Long id = Long.parseLong(hospitalId);
+            Hospital matchedHospital = hospitalRepository.findByHospitalId(id);
+            if (matchedHospital == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("The hospital is not found");
+            }
+            doctor.setHospital(matchedHospital);
+            Doctor createdDoctor = doctorRepository.save(doctor);
+            if (createdDoctor == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("User could not be created");
+            }
+            return ResponseEntity.status(HttpStatus.CREATED).body("User registration successfully");
+        } catch (Exception e) {
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+        }
     }
 
     @PostMapping("/register/patient")
-    public ResponseEntity<?> register()
+    public ResponseEntity<?> register(@RequestBody Patient patient)
     {
-
+        try {
+            Optional<User> existingUser = userRepository.findByUsername(patient.getUsername());
+            if(existingUser.isPresent())
+            {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("User is already registered");
+            }
+            Role existRole = roleRepository.findByName("ROLE_PATIENT");
+            if (existRole == null) {
+                Role newrole = new Role("ROLE_PATIENT");
+                existRole = roleRepository.save(newrole);
+            }
+            Set<Role> roles = new HashSet<Role>();
+            roles.add(existRole);
+            String encodedPassword = passwordEncoder.encode(patient.getPassword());
+            patient.setPassword(encodedPassword);
+            patient.setRoles(roles);
+            patientRepository.save(patient);
+            return ResponseEntity.status(HttpStatus.CREATED).body("User registration successfully");
+        }catch(Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 }

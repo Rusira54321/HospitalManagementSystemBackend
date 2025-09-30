@@ -23,6 +23,7 @@ public class Hospital
 
     @OneToMany(mappedBy = "hospital",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<HospitalStaff> hospitalStaffs;
+
     public Hospital()
     {}
 

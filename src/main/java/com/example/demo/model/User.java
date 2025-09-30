@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -14,28 +15,24 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name="users")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonProperty("username")
     @Column(unique = true,nullable = false)
     private String username;
 
+    @JsonProperty("password")
     @Column(nullable = false)
     private String password;
 
+    @JsonProperty("email")
     @Column(nullable = false,unique = true)
     private String email;
 
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Doctor doctor;
-
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Patient patient;
-
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
-    private HospitalStaff hospitalStaff;
 
     @ManyToMany(
             fetch=FetchType.EAGER)
@@ -51,39 +48,11 @@ public class User implements UserDetails {
 
     }
 
-    public User(String username,String password,Set<Role> roles,String email)
+    public User(String username,String password,String email)
     {
         this.username = username;
         this.password = password;
-        this.roles = roles;
         this.email = email;
-    }
-
-    public void setDoctor(Doctor doctor)
-    {
-        this.doctor = doctor;
-    }
-
-    public void setPatient(Patient patient)
-    {
-        this.patient = patient;
-    }
-
-    public void setHospitalStaff(HospitalStaff hospitalStaff)
-    {
-        this.hospitalStaff = hospitalStaff;
-    }
-    public Doctor getDoctor()
-    {
-        return doctor;
-    }
-    public Patient getPatient()
-    {
-        return patient;
-    }
-    public HospitalStaff getHospitalStaff()
-    {
-        return hospitalStaff;
     }
     public void setEmail(String email)
     {
