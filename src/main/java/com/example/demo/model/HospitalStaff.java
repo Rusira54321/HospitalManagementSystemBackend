@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -15,15 +16,15 @@ public class HospitalStaff extends  User{
     @Column(nullable = false)
     private String lastName;
 
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hospital_id",nullable = false)
+    @JsonBackReference
     private Hospital hospital;
 
     public HospitalStaff()
     {}
 
-    public HospitalStaff(String firstName, String lastName, String username, String password,Set<Role> roles,String email)
+    public HospitalStaff(String firstName, String lastName, String username, String password,String email)
     {
         super(username,password,email);
         this.firstName = firstName;

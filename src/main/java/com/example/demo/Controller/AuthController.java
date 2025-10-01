@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -104,7 +105,7 @@ public class AuthController
             }
             return ResponseEntity.status(HttpStatus.CREATED).body("User registration successfully");
         } catch (Exception e) {
-            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -132,6 +133,31 @@ public class AuthController
         }catch(Exception e)
         {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @PostMapping("/createHospital")
+    public ResponseEntity<?> createHospital(@RequestBody Hospital hospital)
+    {
+        try {
+            hospitalRepository.save(hospital);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Hospital created successfully");
+        }catch(Exception e)
+        {
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @GetMapping("/getHospitals")
+    public ResponseEntity<?> getHospitals()
+    {
+        try {
+            List<Hospital> hospitals = hospitalRepository.findAll();
+            if(hospitals.isEmpty())
+            {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Hospitals in the Data base");
+            }
+            return ResponseEntity.ok(hospitals);
+        } catch (Exception e) {
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }

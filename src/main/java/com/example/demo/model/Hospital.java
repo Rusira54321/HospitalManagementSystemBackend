@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -18,10 +19,14 @@ public class Hospital
     @Column(nullable = false)
     private String hospitalLocation;
 
+
     @OneToMany(mappedBy = "hospital" ,cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonManagedReference
     private List<Doctor> doctors;
 
+
     @OneToMany(mappedBy = "hospital",cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonManagedReference
     private List<HospitalStaff> hospitalStaffs;
 
     public Hospital()
