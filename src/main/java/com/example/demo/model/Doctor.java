@@ -32,7 +32,7 @@ public class Doctor extends  User {
 
     public Doctor()
     {
-
+    
     }
     public Doctor(String firstName, String lastName, String specialization, String username, String password, String email)
     {
