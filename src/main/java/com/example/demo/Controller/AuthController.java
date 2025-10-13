@@ -45,6 +45,11 @@ public class AuthController
             {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("User is already registered");
             }
+            Optional<User> existEmail = userRepository.findByEmail(hospitalStaff.getEmail());
+            if(existEmail.isPresent())
+            {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already exist");
+            }
             Role existRole = roleRepository.findByName("ROLE_"+role.toUpperCase());
             if (existRole == null) {
                 Role newrole = new Role("ROLE_"+role.toUpperCase());
@@ -81,6 +86,11 @@ public class AuthController
             if(existingUser.isPresent())
             {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("User is already registered");
+            }
+            Optional<User> existEmail = userRepository.findByEmail(doctor.getEmail());
+            if(existEmail.isPresent())
+            {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already exist");
             }
             Role existRole = roleRepository.findByName("ROLE_DOCTOR");
             if (existRole == null) {
@@ -140,7 +150,7 @@ public class AuthController
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-    @PostMapping("/createHospital")
+    @PostMapping(value = "/createHospital")
     public ResponseEntity<?> createHospital(@RequestBody Hospital hospital)
     {
         try {

@@ -25,20 +25,21 @@ public class Hospital
     private HospitalType hospitalType;
 
     @OneToMany(mappedBy = "hospital" ,cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonBackReference
+    @JsonManagedReference
     private List<Doctor> doctors;
 
     @OneToMany(mappedBy = "hospital",cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonBackReference
+    @JsonManagedReference
     private List<HospitalStaff> hospitalStaffs;
 
     public Hospital()
     {}
 
-    public Hospital(String hospitalName,String hospitalLocation)
+    public Hospital(String hospitalName,String hospitalLocation,HospitalType hospitalType)
     {
         this.hospitalLocation = hospitalLocation;
         this.hospitalName = hospitalName;
+        this.hospitalType = hospitalType;
     }
 
     public void setHospitalType(HospitalType hospitalType) { this.hospitalType = hospitalType;}

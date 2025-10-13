@@ -19,7 +19,7 @@ public class HospitalStaff extends  User{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hospital_id",nullable = false)
-    @JsonManagedReference
+    @JsonBackReference
     private Hospital hospital;
 
     public HospitalStaff()

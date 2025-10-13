@@ -31,6 +31,11 @@ public class PatientController {
             {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Hospitals in the Data base");
             }
+            for(Doctor doctor : doctors)
+            {
+                Hospital hospital = doctor.getHospital();
+
+            }
             return ResponseEntity.ok(doctors);
         } catch (Exception e) {
             return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
