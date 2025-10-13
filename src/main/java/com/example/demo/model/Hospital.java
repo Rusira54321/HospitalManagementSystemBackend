@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -19,14 +20,16 @@ public class Hospital
     @Column(nullable = false)
     private String hospitalLocation;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private HospitalType hospitalType;
 
     @OneToMany(mappedBy = "hospital" ,cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonManagedReference
+    @JsonBackReference
     private List<Doctor> doctors;
 
-
     @OneToMany(mappedBy = "hospital",cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonManagedReference
+    @JsonBackReference
     private List<HospitalStaff> hospitalStaffs;
 
     public Hospital()
@@ -38,6 +41,7 @@ public class Hospital
         this.hospitalName = hospitalName;
     }
 
+    public void setHospitalType(HospitalType hospitalType) { this.hospitalType = hospitalType;}
     public void setHospitalName(String hospitalName) {
         this.hospitalName = hospitalName;
     }
@@ -77,4 +81,5 @@ public class Hospital
     {
         return hospitalStaffs;
     }
+    public HospitalType getHospitalType(){return hospitalType;}
 }

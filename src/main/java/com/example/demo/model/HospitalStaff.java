@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -18,7 +19,7 @@ public class HospitalStaff extends  User{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hospital_id",nullable = false)
-    @JsonBackReference
+    @JsonManagedReference
     private Hospital hospital;
 
     public HospitalStaff()

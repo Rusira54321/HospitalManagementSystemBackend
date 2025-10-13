@@ -118,6 +118,11 @@ public class AuthController
             {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("User is already registered");
             }
+            Optional<User> existingEmail = userRepository.findByEmail(patient.getEmail());
+            if(existingEmail.isPresent())
+            {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already exist");
+            }
             Role existRole = roleRepository.findByName("ROLE_PATIENT");
             if (existRole == null) {
                 Role newrole = new Role("ROLE_PATIENT");

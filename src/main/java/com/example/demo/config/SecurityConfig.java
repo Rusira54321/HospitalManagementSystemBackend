@@ -41,7 +41,7 @@ public class SecurityConfig
                         .requestMatchers("/api/auth/register/doctor").hasRole("ADMIN")
                         .requestMatchers("/api/auth/register/patient").permitAll()
                         .requestMatchers("/api/auth/createHospital").hasRole("ADMIN")
-                        .requestMatchers("/api/auth/getHospitals").hasRole("ADMIN")
+                        .requestMatchers("/api/auth/getHospitals").hasAnyRole("ADMIN","PATIENT")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/doctor/**").hasRole("DOCTOR")
                         .requestMatchers("/api/patient/**").hasRole("PATIENT")

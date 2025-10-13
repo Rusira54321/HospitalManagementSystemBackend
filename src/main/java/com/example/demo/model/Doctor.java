@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.springframework.boot.autoconfigure.web.WebProperties;
@@ -26,7 +27,7 @@ public class Doctor extends  User {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hospital_id",nullable = false)
-    @JsonBackReference
+    @JsonManagedReference
     private Hospital hospital;
 
     public Doctor()
