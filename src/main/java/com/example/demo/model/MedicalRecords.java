@@ -19,8 +19,6 @@ public class MedicalRecords {
     @Column
     private String visitHistory;
 
-    @OneToOne(mappedBy = "medicalRecords",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Patient patient;
 
     public MedicalRecords()
     {}
@@ -32,14 +30,7 @@ public class MedicalRecords {
         this.visitHistory = visitHistory;
     }
 
-    public void setPatient(Patient patient)
-    {
-        this.patient = patient;
-    }
-    public Patient getPatient()
-    {
-        return patient;
-    }
+
     public void setAllergies(String allergies)
     {
         this.allergies = allergies;

@@ -27,15 +27,23 @@ public class Appointment
     private Doctor doctor;
 
     @Column(nullable = false)
+    private String roomLocation;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @Column(nullable = false)
+    private LocalDateTime createTime;
+
+    private LocalDateTime bookedTime;
 
     private Float price;
 
     public Appointment()
     {}
     public Appointment(LocalDateTime startTime,LocalDateTime endTime,Status status,
-                       Float price,Doctor doctor,Patient patient)
+                       Float price,Doctor doctor,Patient patient,String roomLocation)
     {
         this.startTime = startTime;
         this.endTime = endTime;
@@ -43,8 +51,37 @@ public class Appointment
         this.price = price;
         this.doctor = doctor;
         this.patient = patient;
+        this.roomLocation = roomLocation;
     }
 
+    public void setCreateTime(LocalDateTime createTime)
+    {
+        this.createTime = createTime;
+    }
+    public void setBookedTime(LocalDateTime bookedTime)
+    {
+        this.bookedTime = bookedTime;
+    }
+    public LocalDateTime getCreateTime()
+    {
+        return createTime;
+    }
+    public LocalDateTime getBookedTime()
+    {
+        return bookedTime;
+    }
+    public void setRoomLocation(String roomLocation)
+    {
+        this.roomLocation = roomLocation;
+    }
+    public String getRoomLocation()
+    {
+        return  roomLocation;
+    }
+    public Long getId()
+    {
+        return  id;
+    }
     public void setPrice(Float price)
     {
         this.price = price;
