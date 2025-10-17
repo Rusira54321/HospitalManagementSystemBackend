@@ -31,7 +31,10 @@ public class SecurityConfig {
                         // Public endpoints
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/register/patient").permitAll()
-                        .requestMatchers("/api/patient/**").permitAll() // <-- allow patient API without login
+                        .requestMatchers("/api/patient/**").permitAll() //
+                        .requestMatchers("/api/appointment/**").permitAll()
+                        .requestMatchers("/api/hospital/**").permitAll()
+                        .requestMatchers("/api/department/**").permitAll()
 
                         // Admin-only endpoints
                         .requestMatchers("/api/auth/register/hospitalStaff").hasRole("ADMIN")
