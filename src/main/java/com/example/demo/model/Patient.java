@@ -1,104 +1,64 @@
 package com.example.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
-import java.util.Set;
-
 @Entity
-@Table(name = "patients")
-public class Patient extends User {
+@Table(name = "patient") // Keep table name simple
+public class Patient {
 
-    @JsonProperty("FirstName")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(nullable = false)
-    private String FirstName;
+    private String name;
 
-    @JsonProperty("LastName")
-    @Column(nullable = false)
-    private String LastName;
+    @Column(nullable = false, unique = true)
+    private String patientId;
 
-    @JsonProperty("dateOfBirth")
-    @Column(nullable = false)
-    private LocalDate dateOfBirth;
+    private String dob;
+    private String lastVisit;
+    private String medications;
+    private String allergies;
+    private String appointmentDate;
+    private String appointmentTime;
+    private String selectedDoctor;
+    private String appointmentReason;
 
-    @JsonProperty("gender")
-    @Column(nullable = false)
-    private String gender;
+    // Default constructor
+    public Patient() {}
 
-    @JsonProperty("PhoneNumber")
-    @Column
-    private String PhoneNumber;
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "medicalrecords_id")
-    private MedicalRecords medicalRecords;
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public Patient()
-    {
+    public String getPatientId() { return patientId; }
+    public void setPatientId(String patientId) { this.patientId = patientId; }
 
-    }
+    public String getDob() { return dob; }
+    public void setDob(String dob) { this.dob = dob; }
 
-    public Patient(String FirstName, String LastName,LocalDate dateOfBirth,String gender, String PhoneNumber, String username, String password, String email)
-    {
-        super(username,password,email);
-        this.FirstName = FirstName;
-        this.LastName = LastName;
-        this.gender = gender;
-        this.PhoneNumber = PhoneNumber;
-        this.dateOfBirth = dateOfBirth;
-    }
+    public String getLastVisit() { return lastVisit; }
+    public void setLastVisit(String lastVisit) { this.lastVisit = lastVisit; }
 
-    public void setMedicalRecords(MedicalRecords medicalRecords)
-    {
-        this.medicalRecords = medicalRecords;
-    }
-    public MedicalRecords getMedicalRecords()
-    {
-        return  medicalRecords;
-    }
-    public void setPhoneNumber(String PhoneNumber)
-    {
-        this.PhoneNumber = PhoneNumber;
-    }
+    public String getMedications() { return medications; }
+    public void setMedications(String medications) { this.medications = medications; }
 
-    public  void setFirstName(String FirstName)
-    {
-        this.FirstName = FirstName;
-    }
+    public String getAllergies() { return allergies; }
+    public void setAllergies(String allergies) { this.allergies = allergies; }
 
-    public void setLastName(String LastName)
-    {
-        this.LastName = LastName;
-    }
+    public String getAppointmentDate() { return appointmentDate; }
+    public void setAppointmentDate(String appointmentDate) { this.appointmentDate = appointmentDate; }
 
-    public void setDateOfBirth(LocalDate dateOfBirth)
-    {
-        this.dateOfBirth = dateOfBirth;
-    }
+    public String getAppointmentTime() { return appointmentTime; }
+    public void setAppointmentTime(String appointmentTime) { this.appointmentTime = appointmentTime; }
 
-    public void setGender(String gender)
-    {
-        this.gender = gender;
-    }
-    public String getFirstName()
-    {
-        return FirstName;
-    }
-    public String getLastName()
-    {
-        return LastName;
-    }
-    public LocalDate getDateOfBirth()
-    {
-        return dateOfBirth;
-    }
-    public String getGender()
-    {
-        return gender;
-    }
-    public String getPhoneNumber()
-    {
-        return PhoneNumber;
-    }
+    public String getSelectedDoctor() { return selectedDoctor; }
+    public void setSelectedDoctor(String selectedDoctor) { this.selectedDoctor = selectedDoctor; }
+
+    public String getAppointmentReason() { return appointmentReason; }
+    public void setAppointmentReason(String appointmentReason) { this.appointmentReason = appointmentReason; }
 }
